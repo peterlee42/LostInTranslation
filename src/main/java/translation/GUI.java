@@ -1,6 +1,7 @@
 package translation;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 
 
@@ -13,17 +14,32 @@ public class GUI {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            JPanel countryPanel = new JPanel();
-            JTextField countryField = new JTextField(10);
-            countryField.setText("can");
-            countryField.setEditable(false); // we only support the "can" country code for now
-            countryPanel.add(new JLabel("Country:"));
-            countryPanel.add(countryField);
+            LanguageCodeConverter lc = new LanguageCodeConverter();
+            CountryCodeConverter cc = new CountryCodeConverter();
+            Translator translator = new CanadaTranslator();
 
             JPanel languagePanel = new JPanel();
-            JTextField languageField = new JTextField(10);
             languagePanel.add(new JLabel("Language:"));
-            languagePanel.add(languageField);
+            JComboBox<String> languageComboBox = new JComboBox<>();
+            for(String languageCode : translator.getLanguageCodes()) {
+                languageComboBox.addItem(lc.fromLanguageCode(languageCode));
+            }
+            languagePanel.add(languageComboBox);
+
+            JPanel countryPanel = new JPanel();
+            countryPanel.setLayout(new GridLayout(0, 2));
+            countryPanel.add(new JLabel("Translation:"), 0);
+
+            String[] items = new String[translator.getCountryCodes().size()];
+            int i = 0;
+            for(String countryCode : translator.getCountryCodes()) {
+                // items[i++] = cc.fromCountryCode(countryCode);
+                items[i++] = countryCode;
+            }
+            JList<String> list = new JList<>(items);
+            JScrollPane scrollPane = new JScrollPane(list);
+            countryPanel.add(scrollPane, 1);
+
 
             JPanel buttonPanel = new JPanel();
             JButton submit = new JButton("Submit");
@@ -35,7 +51,7 @@ public class GUI {
             buttonPanel.add(resultLabel);
 
 
-            // adding listener for when the user clicks the submit button
+            /* adding listener for when the user clicks the submit button
             submit.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -54,18 +70,19 @@ public class GUI {
 
                 }
 
-            });
+            }); */
 
             JPanel mainPanel = new JPanel();
             mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-            mainPanel.add(countryPanel);
             mainPanel.add(languagePanel);
+            mainPanel.add(countryPanel);
             mainPanel.add(buttonPanel);
 
             JFrame frame = new JFrame("Country Name Translator");
             frame.setContentPane(mainPanel);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.pack();
+            frame.setLocationRelativeTo(null);
             frame.setVisible(true);
 
 
