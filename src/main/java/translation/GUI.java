@@ -26,9 +26,10 @@ public class GUI {
             }
             languagePanel.add(languageComboBox);
 
+            JPanel translationTitle = new JPanel();
+            translationTitle.add(new JLabel("Translation:"));
             JPanel countryPanel = new JPanel();
-            countryPanel.setLayout(new GridLayout(0, 2));
-            countryPanel.add(new JLabel("Translation:"), 0);
+            countryPanel.setLayout(new GridLayout(0, 1));
 
             String[] items = new String[translator.getCountryCodes().size()];
             int i = 0;
@@ -38,8 +39,7 @@ public class GUI {
             }
             JList<String> list = new JList<>(items);
             JScrollPane scrollPane = new JScrollPane(list);
-            countryPanel.add(scrollPane, 1);
-
+            countryPanel.add(scrollPane, 0);
 
             JPanel buttonPanel = new JPanel();
             JButton submit = new JButton("Submit");
@@ -75,6 +75,7 @@ public class GUI {
             JPanel mainPanel = new JPanel();
             mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
             mainPanel.add(languagePanel);
+            mainPanel.add(translationTitle);
             mainPanel.add(countryPanel);
             mainPanel.add(buttonPanel);
 
