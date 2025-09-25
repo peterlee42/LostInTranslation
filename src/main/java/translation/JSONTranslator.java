@@ -60,10 +60,19 @@ public class JSONTranslator implements Translator {
                     if (!key.equals("id") && !key.equals("alpha2") && !key.equals("alpha3")) {
                         String languageCode = key;
 
-                        translations.put(languageCode, countryCode);
+                        StringBuilder sb = new StringBuilder();
+                        sb.append(countryCode);
+                        sb.append('-');
+                        sb.append(languageCode);
+                        
+                        translations.put(sb.toString(), countryData.getString(key));
 
                         if (!languages.contains(languageCode)) {
                             languages.add(languageCode);
+                        }
+
+                        if (!languageCodes.contains(languageCode)) {
+                            languageCodes.add(languageCode);
                         }
                     }
                 }
@@ -91,11 +100,16 @@ public class JSONTranslator implements Translator {
     // @return the name of the country in the given language or null if no translation is available
     @Override
     public String translate(String countryCode, String languageCode) {
-        if (!translations.containsKey(languageCode)) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(countryCode);
+        sb.append('-');
+        sb.append(languageCode);
+
+        if (!translations.containsKey(sb.toString())) {
             return null;
         }
         else {
-            return translations.get(languageCode);
+            return translations.get(sb.toString());
         }
     }
 }
